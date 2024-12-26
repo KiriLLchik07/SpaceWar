@@ -1,4 +1,4 @@
-namespace SpaceWar_Tests;
+﻿namespace SpaceWar_Tests;
 
 public class VectorTests
 {

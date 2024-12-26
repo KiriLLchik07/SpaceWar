@@ -1,4 +1,4 @@
-public class Vector
+﻿public class Vector
 {
     public int[] Coordinates { get; }
     public Vector(params int[] coordinates)
