@@ -66,7 +66,7 @@ jobs:
           echo "### Uncovered Lines Details" >> $GITHUB_STEP_SUMMARY
           echo "Analyzing coverage report..." >> $GITHUB_STEP_SUMMARY
           
-          for file in $(find SpaceBattle.Lib -name "*.cs" -not -path "*/obj/*"); do
+          for file in $(find SpaceWar_workspace -name "*.cs" -not -path "*/obj/*"); do
             filename=$(basename "$file")
             echo "#### $filename" >> $GITHUB_STEP_SUMMARY
           done
@@ -114,7 +114,7 @@ jobs:
                 actual_file=""
                 
                 if [ -f "SpaceWar_workspace/$file_name" ]; then
-                  actual_file="SpaceBattle.Lib/$file_name"
+                  actual_file="SpaceWar_workspace/$file_name"
                 else
                   found_file=$(find SpaceWar_workspace -name "$file_name" -not -path "*/obj/*" -not -path "*/bin/*" -type f | head -n 1)
                   if [ ! -z "$found_file" ]; then
