@@ -29,8 +29,8 @@ jobs:
 
       - name: Build
         run: |
-          dotnet build SpaceBattle.Lib/SpaceBattle.Lib.csproj --configuration Release
-          dotnet build SpaceBattle.Tests/SpaceBattle.Tests.csproj --configuration Release
+          dotnet build SpaceWar_workspace/SpaceWar_workspace.csproj --configuration Release
+          dotnet build SpaceWar_Tests/SpaceWar_Tests.csproj --configuration Release
 
       - name: Test
         run: dotnet test --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
