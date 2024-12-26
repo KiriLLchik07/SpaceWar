@@ -1,5 +1,7 @@
-﻿﻿namespace SpaceWar_workspace;
-public interface ICommandInjectable
+﻿﻿namespace SpaceWar_workspace
 {
-    void Inject(ICommand command);
+    public interface ICommandInjectable
+    {
+        void Inject(ICommand command);
+    }
 }
