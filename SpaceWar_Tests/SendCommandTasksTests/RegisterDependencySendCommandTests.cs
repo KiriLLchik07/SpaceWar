@@ -1,7 +1,7 @@
 ﻿using Hwdtech.Ioc;
 using SpaceWar_workspace;
 
-namespace SpaceBattle.Tests
+namespace SpaceWar_Tests
 {
     public class RegisterDependencySendCommandTests
     {
