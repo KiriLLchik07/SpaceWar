@@ -9,7 +9,7 @@ public class CreateMacroCommandStrategy
     public ICommand Resolve(object[] args)
     {
         var nameofcommand = IoC.Resolve<IEnumerable<string>>($"Specs.{_commandSpec}").ToList();
-        var command = nameofcommand.Select((name, index) => 
+        var command = nameofcommand.Select((name, index) =>
         {
             if (index < args.Length)
             {
