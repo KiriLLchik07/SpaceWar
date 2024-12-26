@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{B9FD2927-E7D0-47E3-B370-695017A7EE6F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{7DAE5D59-50F6-4D56-BB9A-94103BCE5053}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{55252A5C-27EF-4BEE-80A0-F755B446A25D}"
+	ProjectSection(SolutionItems) = preProject
+		ci.yml = ci.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceWar_workspace", "SpaceWar_workspace\SpaceWar_workspace.csproj", "{F87E19D1-14CB-4BE5-A72A-503132CE98ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceWar_Tests", "SpaceWar_Tests\SpaceWar_Tests.csproj", "{77DDE8CD-30DE-4AF8-ABC6-AFD064F01D13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F87E19D1-14CB-4BE5-A72A-503132CE98ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F87E19D1-14CB-4BE5-A72A-503132CE98ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F87E19D1-14CB-4BE5-A72A-503132CE98ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F87E19D1-14CB-4BE5-A72A-503132CE98ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77DDE8CD-30DE-4AF8-ABC6-AFD064F01D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77DDE8CD-30DE-4AF8-ABC6-AFD064F01D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77DDE8CD-30DE-4AF8-ABC6-AFD064F01D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77DDE8CD-30DE-4AF8-ABC6-AFD064F01D13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55252A5C-27EF-4BEE-80A0-F755B446A25D} = {7DAE5D59-50F6-4D56-BB9A-94103BCE5053}
+	EndGlobalSection
+EndGlobal
