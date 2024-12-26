@@ -1,6 +1,5 @@
 ﻿using SpaceWar_workspace;
 namespace SpaceWar_Tests;
-
 public class MacroCommandTests
 {
     [Fact]
