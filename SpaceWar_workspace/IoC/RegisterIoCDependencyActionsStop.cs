@@ -1,4 +1,4 @@
-namespace SpaceWar_workspace;
+﻿namespace SpaceWar_workspace;
 
 public class RegisterIoCDependencyActionsStop : ICommand
 {

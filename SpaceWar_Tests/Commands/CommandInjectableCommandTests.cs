@@ -1,4 +1,4 @@
-using SpaceWar_workspace;
+﻿using SpaceWar_workspace;
 namespace SpaceWar_Tests;
 public class CommandInjectableCommandTests
 {

@@ -33,4 +33,3 @@ public class SendCommandTests
         Assert.Throws<Exception>(() => _sendCommand.Execute());
     }
 }
-

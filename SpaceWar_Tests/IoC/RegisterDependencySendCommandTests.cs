@@ -37,4 +37,3 @@ public class RegisterDependencySendCommandTests
         Assert.IsType<SendCommand>(command);
     }
 }
-

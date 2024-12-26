@@ -9,4 +9,3 @@ public class RegisterIoCDependencySendCommand : ICommand
         ).Execute();
     }
 }
-
