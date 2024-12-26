@@ -76,8 +76,8 @@ jobs:
           echo "### 📊 Coverage Details by Class" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          if [ ! -d "SpaceBattle.Lib" ]; then
-            echo "❌ Error: SpaceBattle.Lib directory not found!" >> $GITHUB_STEP_SUMMARY
+          if [ ! -d "SpaceWar_workspace" ]; then
+            echo "❌ Error: SpaceWar_workspace directory not found!" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
           
@@ -113,14 +113,14 @@ jobs:
                 
                 actual_file=""
                 
-                if [ -f "SpaceBattle.Lib/$file_name" ]; then
+                if [ -f "SpaceWar_workspace/$file_name" ]; then
                   actual_file="SpaceBattle.Lib/$file_name"
                 else
-                  found_file=$(find SpaceBattle.Lib -name "$file_name" -not -path "*/obj/*" -not -path "*/bin/*" -type f | head -n 1)
+                  found_file=$(find SpaceWar_workspace -name "$file_name" -not -path "*/obj/*" -not -path "*/bin/*" -type f | head -n 1)
                   if [ ! -z "$found_file" ]; then
                     actual_file="$found_file"
                   else
-                    found_file=$(find SpaceBattle.Lib -iname "$file_name" -not -path "*/obj/*" -not -path "*/bin/*" -type f | head -n 1)
+                    found_file=$(find SpaceWar_workspace -iname "$file_name" -not -path "*/obj/*" -not -path "*/bin/*" -type f | head -n 1)
                     if [ ! -z "$found_file" ]; then
                       actual_file="$found_file"
                     fi
@@ -154,7 +154,7 @@ jobs:
                   unset seen_lines
                   rm class_info.xml
                 else
-                  echo "⚠️ File not found in SpaceBattle.Lib: $file_name" >> $GITHUB_STEP_SUMMARY
+                  echo "⚠️ File not found in SpaceWar_workspace: $file_name" >> $GITHUB_STEP_SUMMARY
                   echo "Please ensure the file exists and is in the correct location." >> $GITHUB_STEP_SUMMARY
                 fi
                 
