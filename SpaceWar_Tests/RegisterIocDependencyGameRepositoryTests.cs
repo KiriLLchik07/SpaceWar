@@ -1,8 +1,18 @@
 ﻿using SpaceWar_workspace;
+using Hwdtech.Ioc;
 namespace SpaceWar_Tests
 {
     public class RegisterIocDependencyGameRepositoryTests
     {
+        public RegisterIocDependencyGameRepositoryTests()
+    {
+        new InitScopeBasedIoCImplementationCommand().Execute();
+
+        IoC.Resolve<ICommand>("Scopes.Current.Set",
+            IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
+
+    }
+        
         [Fact]
         public void RegisterIocDependencyGameRepository_RegistersDependencies_Successfully()
         {
@@ -15,19 +25,22 @@ namespace SpaceWar_Tests
                 "Ship1",
                 new Dictionary<string, object> { { "Type", "Spaceship" } }
             );
-            Assert.NotNull(addCommand);
 
-            var removeCommand = IoC.Resolve<ICommand>(
-                "GameItem.Remove",
-                "Ship1"
-            );
-            Assert.NotNull(removeCommand);
+            addCommand.Execute();
+            Assert.NotNull(addCommand);
 
             var getCommandResult = IoC.Resolve<IDictionary<string, object>>(
                 "GameItem.Get",
                 "Ship1"
             );
             Assert.NotNull(getCommandResult);
+            
+            var removeCommand = IoC.Resolve<ICommand>(
+                "GameItem.Remove",
+                "Ship1"
+            );
+            Assert.NotNull(removeCommand);
+
         }
 
         [Fact]
@@ -36,8 +49,8 @@ namespace SpaceWar_Tests
             var registerCommand = new RegisterIocDependencyGameRepository();
             registerCommand.Execute();
 
-            Assert.Throws<InvalidOperationException>(() =>
-                IoC.Resolve<ICommand>("NonExistentCommand")
+            Assert.Throws<ArgumentException>(() =>
+                IoC.Resolve<ICommand>("Несуществующая команда")
             );
         }
     }
