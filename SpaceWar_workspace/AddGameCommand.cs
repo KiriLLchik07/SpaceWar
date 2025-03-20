@@ -7,7 +7,7 @@ public class AddGameCommand : ICommand
 
     public AddGameCommand(Dictionary<string, IDictionary<string, object>> gameItems, string gameObjectId, IDictionary<string, object> parameters)
     {
-        _gameItems = gameItems; 
+        _gameItems = gameItems;
         _gameObjectId = gameObjectId;
         _parameters = parameters;
     }
