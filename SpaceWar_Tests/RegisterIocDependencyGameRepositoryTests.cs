@@ -1,17 +1,18 @@
 ﻿using SpaceWar_workspace;
 using Hwdtech.Ioc;
+
 namespace SpaceWar_Tests
 {
     public class RegisterIocDependencyGameRepositoryTests
     {
         public RegisterIocDependencyGameRepositoryTests()
-    {
-        new InitScopeBasedIoCImplementationCommand().Execute();
+        {
+            new InitScopeBasedIoCImplementationCommand().Execute();
 
-        IoC.Resolve<ICommand>("Scopes.Current.Set",
-            IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
+            IoC.Resolve<ICommand>("Scopes.Current.Set",
+                IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-    }
+        }
         
         [Fact]
         public void RegisterIocDependencyGameRepository_RegistersDependencies_Successfully()
