@@ -1,24 +1,22 @@
-﻿namespace SpaceWar_workspace
+﻿namespace SpaceWar_workspace;
+public class RemoveGameCommand : ICommand
 {
-    public class RemoveGameCommand : ICommand
+    private readonly Dictionary<string, IDictionary<string, object>> _gameItems;
+    private readonly string _gameObjectId;
+
+    public RemoveGameCommand(Dictionary<string, IDictionary<string, object>> gameItems, string objectId)
     {
-        private readonly Dictionary<string, IDictionary<string, object>> _gameItems;
-        private readonly string _gameObjectId;
+        _gameItems = gameItems;
+        _gameObjectId = objectId;
+    }
 
-        public RemoveGameCommand(Dictionary<string, IDictionary<string, object>> gameItems, string objectId)
+    public void Execute()
+    {
+        if (!_gameItems.ContainsKey(_gameObjectId))
         {
-            _gameItems = gameItems;
-            _gameObjectId = objectId;
+            throw new KeyNotFoundException($"Object with ID {_gameObjectId} not found.");
         }
 
-        public void Execute()
-        {
-            if (!_gameItems.ContainsKey(_gameObjectId))
-            {
-                throw new KeyNotFoundException($"Object with ID {_gameObjectId} not found.");
-            }
-
-            _gameItems.Remove(_gameObjectId);
-        }
+        _gameItems.Remove(_gameObjectId);
     }
 }
