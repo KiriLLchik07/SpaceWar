@@ -13,7 +13,7 @@ namespace SpaceWar_Tests
                 IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
         }
-       
+
         [Fact]
         public void RegisterIocDependencyGameRepository_RegistersDependencies_Successfully()
         {
@@ -35,7 +35,7 @@ namespace SpaceWar_Tests
                 "Ship1"
             );
             Assert.NotNull(getCommandResult);
-           
+
             var removeCommand = IoC.Resolve<ICommand>(
                 "GameItem.Remove",
                 "Ship1"
