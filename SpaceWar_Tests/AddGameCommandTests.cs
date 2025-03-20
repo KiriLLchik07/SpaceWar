@@ -27,7 +27,7 @@ namespace SpaceWar_Tests
             var command = new AddGameCommand(gameItems, "Ship1", parameters);
 
             var exception = Assert.Throws<InvalidOperationException>(() => command.Execute());
-            Assert.Equal("Object with ID Ship1 already exists.", exception.Message);
+            Assert.Equal("Объект с ID Ship1 уже существует.", exception.Message);
         }
     }
 }

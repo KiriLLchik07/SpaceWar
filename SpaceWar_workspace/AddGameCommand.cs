@@ -16,7 +16,7 @@ public class AddGameCommand : ICommand
     {
         if (_gameItems.ContainsKey(_gameObjectId))
         {
-            throw new InvalidOperationException($"Объекь с ID {_gameObjectId} уже существует.");
+            throw new InvalidOperationException($"Объект с ID {_gameObjectId} уже существует.");
         }
 
         _gameItems[_gameObjectId] = _parameters;
