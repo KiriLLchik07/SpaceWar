@@ -1,4 +1,6 @@
-﻿public class Vector
+﻿namespace SpaceWar_workspace;
+
+public class Vector
 {
     public int[] Coordinates { get; }
     public Vector(params int[] coordinates)
