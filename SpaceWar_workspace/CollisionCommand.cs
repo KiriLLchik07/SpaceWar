@@ -1,4 +1,4 @@
-namespace SpaceWar_workspace;
+﻿namespace SpaceWar_workspace;
 
 public class CollisionCommand : ICommand
 {
@@ -33,7 +33,7 @@ public class CollisionCommand : ICommand
         }
     }
 
-    private static bool CheckCollisionExists(IDictionary<int, object> collisionTree, int[] branchPath)
+    public static bool CheckCollisionExists(IDictionary<int, object> collisionTree, int[] branchPath)
     {
         if (branchPath.Length == 0)
         {
