@@ -21,7 +21,7 @@ public class WriteObjectToFileCommandTests
         var path = Path.GetTempFileName();
 
         new RegisterIoCDependencyWriteObjectToFileCommand().Execute();
-        var command = Ioc.Resolve<SpaceWar_workspace.ICommand>("Commands.WriteObjectToFile", path, data);
+        var command = Ioc.Resolve<App.ICommand>("Commands.WriteObjectToFile", path, data);
         command.Execute();
 
         var readText = File.ReadAllText(path);
