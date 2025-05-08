@@ -1,5 +1,4 @@
-﻿using App;
-using App.Scopes;
+﻿using App.Scopes;
 using SpaceWar_workspace;
 
 namespace SpaceWar_Tests;
@@ -9,14 +8,14 @@ public class GameTests : IDisposable
     public GameTests()
     {
         new InitCommand().Execute();
-        var iocScope = Ioc.Resolve<object>("IoC.Scope.Create");
-        Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", iocScope).Execute();
+        var iocScope = App.Ioc.Resolve<object>("IoC.Scope.Create");
+        App.Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", iocScope).Execute();
     }
 
     [Fact]
     public void ExecuteCommandsTest()
     {
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.TimeQuant",
             (object[] args) => (object)TimeSpan.FromMilliseconds(50)
@@ -24,13 +23,13 @@ public class GameTests : IDisposable
 
         var game_queue = new Queue<App.ICommand>();
 
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.CommandsQueue",
             (object[] args) => game_queue
         ).Execute();
 
-        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+        var game_scope = App.Ioc.Resolve<object>("IoC.Scope.Current");
 
         var cmd1 = new Mock<App.ICommand>();
         cmd1.Setup(c => c.Execute());
@@ -51,7 +50,7 @@ public class GameTests : IDisposable
     [Fact]
     public void ExecuteEmptyQueueTest()
     {
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.TimeQuant",
             (object[] args) => (object)TimeSpan.FromMilliseconds(50)
@@ -59,13 +58,13 @@ public class GameTests : IDisposable
 
         var game_queue = new Queue<App.ICommand>();
 
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.CommandsQueue",
             (object[] args) => game_queue
         ).Execute();
 
-        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+        var game_scope = App.Ioc.Resolve<object>("IoC.Scope.Current");
         var game = new Game(game_scope);
 
         var exception = Record.Exception(() => game.Execute());
@@ -75,7 +74,7 @@ public class GameTests : IDisposable
     [Fact]
     public void ExecuteCommandsTimeExceededTest()
     {
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.TimeQuant",
             (object[] args) => (object)TimeSpan.FromMilliseconds(10)
@@ -83,13 +82,13 @@ public class GameTests : IDisposable
 
         var game_queue = new Queue<App.ICommand>();
 
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.CommandsQueue",
             (object[] args) => game_queue
         ).Execute();
 
-        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+        var game_scope = App.Ioc.Resolve<object>("IoC.Scope.Current");
 
         var cmd1 = new Mock<App.ICommand>();
         cmd1.Setup(c => c.Execute()).Callback(() => Thread.Sleep(20));
@@ -110,7 +109,7 @@ public class GameTests : IDisposable
     [Fact]
     public void ExecuteCommandExceptionTest()
     {
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.TimeQuant",
             (object[] args) => (object)TimeSpan.FromMilliseconds(50)
@@ -118,13 +117,13 @@ public class GameTests : IDisposable
 
         var game_queue = new Queue<App.ICommand>();
 
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "Game.CommandsQueue",
             (object[] args) => game_queue
         ).Execute();
 
-        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+        var game_scope = App.Ioc.Resolve<object>("IoC.Scope.Current");
 
         var cmd1 = new Mock<App.ICommand>();
         cmd1.Setup(c => c.Execute()).Throws(new Exception());
@@ -132,7 +131,7 @@ public class GameTests : IDisposable
         var mockHandle = new Mock<App.ICommand>();
         mockHandle.Setup(e => e.Execute());
 
-        Ioc.Resolve<App.ICommand>(
+        App.Ioc.Resolve<App.ICommand>(
             "IoC.Register",
             "ExceptionHandler.Handle",
             (object[] args) => mockHandle.Object
@@ -153,6 +152,6 @@ public class GameTests : IDisposable
 
     public void Dispose()
     {
-        Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Clear").Execute();
+        App.Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Clear").Execute();
     }
 }
