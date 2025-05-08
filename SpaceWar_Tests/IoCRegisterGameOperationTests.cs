@@ -1,6 +1,6 @@
 ﻿using SpaceWar_workspace;
 
-namespace SpaceBattle.Lib.Tests
+namespace SpaceWar_Tests
 {
     public class IoCRegisterGameOperationTests : IDisposable
     {
