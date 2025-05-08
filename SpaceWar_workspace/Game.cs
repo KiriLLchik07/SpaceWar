@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
+using App;
 namespace SpaceWar_workspace;
 
-public class Game : App.ICommand
+public class Game : ICommand
 {
     private readonly object _game_scope;
     public Game(object game_scope)
@@ -11,11 +12,11 @@ public class Game : App.ICommand
 
     public void Execute()
     {
-        App.Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", _game_scope).Execute();
+        Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", _game_scope).Execute();
 
-        var queue = App.Ioc.Resolve<Queue<App.ICommand>>("Game.CommandsQueue");
+        var queue = Ioc.Resolve<Queue<ICommand>>("Game.CommandsQueue");
 
-        var time_quant = App.Ioc.Resolve<TimeSpan>("Game.TimeQuant");
+        var time_quant = (TimeSpan)Ioc.Resolve<object>("Game.TimeQuant");
 
         var timer = Stopwatch.StartNew();
 
@@ -28,7 +29,7 @@ public class Game : App.ICommand
             }
             catch (Exception ex)
             {
-                App.Ioc.Resolve<App.ICommand>("ExceptionHandler.Handle", cmd, ex).Execute();
+                Console.WriteLine($"Ошибка при выполнении команды: {ex.Message}");
             }
         }
     }

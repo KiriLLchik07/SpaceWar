@@ -1,20 +1,22 @@
-﻿namespace SpaceWar_workspace
+﻿using App;
+
+namespace SpaceWar_workspace
 {
-    public class IoCRegisterGameOperation : App.ICommand
+    public class IoCRegisterGameOperation : ICommand
     {
         public void Execute()
         {
-            App.Ioc.Resolve<App.ICommand>("IoC.Register", "Game.Receiver", (object[] args) =>
+            Ioc.Resolve<App.ICommand>("IoC.Register", "Game.Receiver", (object[] args) =>
             {
                 Queue<ICommand> queue;
                 try
                 {
-                    queue = App.Ioc.Resolve<Queue<ICommand>>("Game.Queue");
+                    queue = Ioc.Resolve<Queue<ICommand>>("Game.Queue");
                 }
                 catch (System.Exception)
                 {
                     queue = new Queue<ICommand>();
-                    App.Ioc.Resolve<App.ICommand>("IoC.Register", "Game.Queue", (object[] args) => queue).Execute();
+                    Ioc.Resolve<App.ICommand>("IoC.Register", "Game.Queue", (object[] args) => queue).Execute();
                 }
 
                 return new GameReceiver(queue);
