@@ -1,5 +1,4 @@
-﻿using App.Scopes;
-using SpaceWar_workspace;
+﻿using SpaceWar_workspace;
 
 namespace SpaceBattle.Lib.Tests
 {
@@ -7,7 +6,7 @@ namespace SpaceBattle.Lib.Tests
     {
         public IoCRegisterGameOperationTests()
         {
-            new InitCommand().Execute();
+            new App.Scopes.InitCommand().Execute();
             var iocScope = App.Ioc.Resolve<object>("IoC.Scope.Create");
             App.Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", iocScope).Execute();
         }

@@ -1,5 +1,4 @@
-﻿using App.Scopes;
-using SpaceWar_workspace;
+﻿using SpaceWar_workspace;
 
 namespace SpaceWar_Tests;
 
@@ -7,7 +6,7 @@ public class GameTests : IDisposable
 {
     public GameTests()
     {
-        new InitCommand().Execute();
+        new App.Scopes.InitCommand().Execute();
         var iocScope = App.Ioc.Resolve<object>("IoC.Scope.Create");
         App.Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", iocScope).Execute();
     }
