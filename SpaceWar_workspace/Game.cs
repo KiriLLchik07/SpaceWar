@@ -13,15 +13,27 @@ public class Game : ICommand
 
     public void Execute()
     {
-        var stopwatch = Stopwatch.StartNew();
+        bool continuePlaying;
 
-        IoC.Resolve<ICommand>("Scopes.Current.Set", _gameScope).Execute();
-
-        while (IoC.Resolve<bool>("Game.CanContinue", stopwatch.ElapsedMilliseconds))
+        do
         {
-            IoC.Resolve<Action>("Game.GameBehaviour")();
-        }
+            var stopwatch = Stopwatch.StartNew();
 
-        stopwatch.Stop();
+            IoC.Resolve<ICommand>("Scopes.Current.Set", _gameScope).Execute();
+
+            Func<long> getElapsed = () => stopwatch.ElapsedMilliseconds;
+
+            while (IoC.Resolve<bool>("Game.CanContinue", getElapsed()))
+            {
+                IoC.Resolve<Action>("Game.GameBehaviour")();
+            }
+
+            stopwatch.Stop();
+
+            Console.WriteLine("Игра окончена. Хотите сыграть еще раз? (y/n)");
+            var input = Console.ReadLine()?.Trim().ToLower();
+            continuePlaying = input == "y";
+
+        } while (continuePlaying);
     }
 }
