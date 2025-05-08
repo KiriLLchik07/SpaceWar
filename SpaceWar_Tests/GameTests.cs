@@ -1,108 +1,158 @@
-﻿using Hwdtech.Ioc;
+﻿using App;
+using App.Scopes;
 using SpaceWar_workspace;
 
 namespace SpaceWar_Tests;
 
-public class GameTests
+public class GameTests : IDisposable
 {
     public GameTests()
     {
-        new InitScopeBasedIoCImplementationCommand().Execute();
-        IoC.Resolve<ICommand>(
-                "Scopes.Current.Set",
-                IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))
-            )
-            .Execute();
+        new InitCommand().Execute();
+        var iocScope = Ioc.Resolve<object>("IoC.Scope.Create");
+        Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", iocScope).Execute();
     }
 
     [Fact]
-    public void GameExecutesCommands()
+    public void ExecuteCommandsTest()
     {
-        var commandMock = new Mock<ICommand>();
-        var gameBehaviour = new RegisterIoCDependencyGameBehaviour();
-        gameBehaviour.Execute();
-        var canContinue = new RegisterIoCDependencyGameCanContinue();
-        canContinue.Execute();
-        var count = 3;
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.TimeQuant",
+            (object[] args) => (object)TimeSpan.FromMilliseconds(50)
+        ).Execute();
 
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Get", (object[] args) => commandMock.Object).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.AllowedTime.Get", (object[] args) => (object)100).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Count", (object[] args) => (object)count).Execute();
+        var game_queue = new Queue<App.ICommand>();
 
-        commandMock.Setup(c => c.Execute()).Callback(() => { count--; });
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.CommandsQueue",
+            (object[] args) => game_queue
+        ).Execute();
 
-        var game = new Game(IoC.Resolve<object>("Scopes.Current"));
+        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+
+        var cmd1 = new Mock<App.ICommand>();
+        cmd1.Setup(c => c.Execute());
+        var cmd2 = new Mock<App.ICommand>();
+        cmd2.Setup(c => c.Execute());
+
+        game_queue.Enqueue(cmd1.Object);
+        game_queue.Enqueue(cmd2.Object);
+
+        var game = new Game(game_scope);
+
         game.Execute();
 
-        commandMock.Verify(c => c.Execute(), Times.Exactly(3));
+        cmd1.Verify(c => c.Execute(), Times.Once());
+        cmd2.Verify(c => c.Execute(), Times.Once());
     }
 
     [Fact]
-    public void ExceptionHandlerIsUsedWhenCommandThrowsException()
+    public void ExecuteEmptyQueueTest()
     {
-        var commandMock = new Mock<ICommand>();
-        var exceptionMock = new Mock<ICommand>();
-        var gameBehaviour = new RegisterIoCDependencyGameBehaviour();
-        gameBehaviour.Execute();
-        var canContinue = new RegisterIoCDependencyGameCanContinue();
-        canContinue.Execute();
-        var count = 1;
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.TimeQuant",
+            (object[] args) => (object)TimeSpan.FromMilliseconds(50)
+        ).Execute();
 
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Get", (object[] args) => commandMock.Object).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.AllowedTime.Get", (object[] args) => (object)100).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Count", (object[] args) => (object)count).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "ExceptionHandler.Handle", (object[] args) => exceptionMock.Object).Execute();
+        var game_queue = new Queue<App.ICommand>();
 
-        commandMock.Setup(c => c.Execute()).Callback(() => { count--; }).Throws(new Exception());
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.CommandsQueue",
+            (object[] args) => game_queue
+        ).Execute();
 
-        var game = new Game(IoC.Resolve<object>("Scopes.Current"));
-        game.Execute();
+        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+        var game = new Game(game_scope);
 
-        exceptionMock.Verify(e => e.Execute(), Times.Once);
+        var exception = Record.Exception(() => game.Execute());
+        Assert.Null(exception);
     }
 
     [Fact]
-    public void CommandsDontExevuteWhenTimeIsOver()
+    public void ExecuteCommandsTimeExceededTest()
     {
-        var commandMock = new Mock<ICommand>();
-        var gameBehaviour = new RegisterIoCDependencyGameBehaviour();
-        gameBehaviour.Execute();
-        var canContinue = new RegisterIoCDependencyGameCanContinue();
-        canContinue.Execute();
-        var count = 3;
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.TimeQuant",
+            (object[] args) => (object)TimeSpan.FromMilliseconds(10)
+        ).Execute();
 
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Get", (object[] args) => commandMock.Object).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.AllowedTime.Get", (object[] args) => (object)-1).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Count", (object[] args) => (object)count).Execute();
+        var game_queue = new Queue<App.ICommand>();
 
-        commandMock.Setup(c => c.Execute()).Callback(() => { count--; });
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.CommandsQueue",
+            (object[] args) => game_queue
+        ).Execute();
 
-        var game = new Game(IoC.Resolve<object>("Scopes.Current"));
+        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+
+        var cmd1 = new Mock<App.ICommand>();
+        cmd1.Setup(c => c.Execute()).Callback(() => Thread.Sleep(20));
+        var cmd2 = new Mock<App.ICommand>();
+        cmd2.Setup(c => c.Execute());
+
+        game_queue.Enqueue(cmd1.Object);
+        game_queue.Enqueue(cmd2.Object);
+
+        var game = new Game(game_scope);
+
         game.Execute();
 
-        commandMock.Verify(c => c.Execute(), Times.Never);
+        cmd1.Verify(c => c.Execute(), Times.Once());
+        cmd2.Verify(c => c.Execute(), Times.Never());
     }
 
     [Fact]
-    public void GameExecutesSomeCommandsBeforeTimeQuantReached()
+    public void ExecuteCommandExceptionTest()
     {
-        var commandMock = new Mock<ICommand>();
-        var gameBehaviour = new RegisterIoCDependencyGameBehaviour();
-        gameBehaviour.Execute();
-        var canContinue = new RegisterIoCDependencyGameCanContinue();
-        canContinue.Execute();
-        var count = 10000;
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.TimeQuant",
+            (object[] args) => (object)TimeSpan.FromMilliseconds(50)
+        ).Execute();
 
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Get", (object[] args) => commandMock.Object).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.AllowedTime.Get", (object[] args) => (object)5).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Queue.Count", (object[] args) => (object)count).Execute();
+        var game_queue = new Queue<App.ICommand>();
 
-        commandMock.Setup(c => c.Execute()).Callback(() => { count--; });
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "Game.CommandsQueue",
+            (object[] args) => game_queue
+        ).Execute();
 
-        var game = new Game(IoC.Resolve<object>("Scopes.Current"));
+        var game_scope = Ioc.Resolve<object>("IoC.Scope.Current");
+
+        var cmd1 = new Mock<App.ICommand>();
+        cmd1.Setup(c => c.Execute()).Throws(new Exception());
+
+        var mockHandle = new Mock<App.ICommand>();
+        mockHandle.Setup(e => e.Execute());
+
+        Ioc.Resolve<App.ICommand>(
+            "IoC.Register",
+            "ExceptionHandler.Handle",
+            (object[] args) => mockHandle.Object
+        ).Execute();
+
+        var cmd2 = new Mock<App.ICommand>();
+        cmd2.Setup(c => c.Execute());
+        game_queue.Enqueue(cmd1.Object);
+        game_queue.Enqueue(cmd2.Object);
+
+        var game = new Game(game_scope);
+
         game.Execute();
 
-        commandMock.Verify(c => c.Execute(), Times.AtLeastOnce);
-        Assert.True(count > 0 && count < 10000);
+        mockHandle.Verify(e => e.Execute(), Times.Once());
+        cmd2.Verify(c => c.Execute(), Times.Once());
+    }
+
+    public void Dispose()
+    {
+        Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Clear").Execute();
     }
 }
