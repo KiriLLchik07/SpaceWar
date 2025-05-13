@@ -39,7 +39,6 @@ public class RegisterIoCCollisionCommand : ICommand
 
                 string otherType;
                 object reference, other;
-                
                 if (referenceType == type1)
                 {
                     otherType = type2;
@@ -61,7 +60,6 @@ public class RegisterIoCCollisionCommand : ICommand
                 var diffCount = positionRef.Length;
                 var dPositions = new int[diffCount];
                 var dVelocities = new int[diffCount];
-                
                 for (var i = 0; i < diffCount; i++)
                 {
                     dPositions[i] = positionRef[i] - positionOther[i];

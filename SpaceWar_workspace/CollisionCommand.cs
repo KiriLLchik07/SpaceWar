@@ -41,19 +41,15 @@ public class CollisionCommand : ICommand
         }
 
         object current = collisionTree;
-        
         foreach (var param in branchPath)
         {
             if (current is IDictionary<int, object> dict && dict.TryGetValue(param, out var next))
             {
                 current = next;
+                return true;
             }
-            else
-            {
-                return false;
-            }
-        }
 
-        return true;
+            return false;
+        });
     }
 }
