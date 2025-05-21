@@ -14,9 +14,9 @@ namespace SpaceWar_Tests
         [Fact]
         public void Positive_Receive_AddsCommandToQueue()
         {
-            var queue = new Queue<ICommand>();
+            var queue = new Queue<SpaceWar_workspace.ICommand>();
             var receiver = new GameReceiver(queue);
-            var commandMock = new Mock<ICommand>();
+            var commandMock = new Mock<SpaceWar_workspace.ICommand>();
 
             receiver.Receive(commandMock.Object);
 
@@ -27,7 +27,7 @@ namespace SpaceWar_Tests
         [Fact]
         public void Positive_Receive_AcceptsNullCommand()
         {
-            var queue = new Queue<ICommand>();
+            var queue = new Queue<SpaceWar_workspace.ICommand>();
             var receiver = new GameReceiver(queue);
 
             receiver.Receive(null!);
