@@ -1,6 +1,8 @@
-﻿namespace SpaceWar_workspace;
+﻿using App;
 
-public class CollisionCommand : ICommand
+namespace SpaceWar_workspace;
+
+public class CollisionCommand
 {
     private readonly object _obj1;
     private readonly object _obj2;
@@ -13,21 +15,21 @@ public class CollisionCommand : ICommand
 
     public void Execute()
     {
-        var collisionState = IoC.Resolve<(int[] branch, string treeKey)>(
-            "Collision.GetState", 
-            _obj1, 
+        var collisionState = Ioc.Resolve<(int[] branch, string treeKey)>(
+            "Collision.GetState",
+            _obj1,
             _obj2
         );
 
-        var collisionTree = IoC.Resolve<IDictionary<int, object>>(
+        var collisionTree = Ioc.Resolve<IDictionary<int, object>>(
             $"Collision.Tree.{collisionState.treeKey}"
         );
 
         if (CheckCollisionExists(collisionTree, collisionState.branch))
         {
-            IoC.Resolve<ICommand>(
-                "Collision.Handle", 
-                _obj1, 
+            Ioc.Resolve<App.ICommand>(
+                "Collision.Handle",
+                _obj1,
                 _obj2
             ).Execute();
         }
@@ -41,7 +43,7 @@ public class CollisionCommand : ICommand
         }
 
         object current = collisionTree;
-        foreach (var param in branchPath)
+        return branchPath.All(param =>
         {
             if (current is IDictionary<int, object> dict && dict.TryGetValue(param, out var next))
             {
