@@ -8,6 +8,6 @@ public class RegisterIoCDependencyCollisionPrepareData : App.ICommand
         Ioc.Resolve<App.ICommand>(
                 "IoC.Register",
                 "Collision.PrepareData",
-                (object[] arg) => new CollisionPrepareDataCommand((ICollisionDataGenerator)arg[0])).Execute();
+                (object[] arg) => new CollisionPrepareDataCommand(arg[0])).Execute();
     }
 }

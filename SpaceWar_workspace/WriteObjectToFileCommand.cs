@@ -14,7 +14,15 @@ public class WriteObjectToFileCommand : ICommand
 
     public void Execute()
     {
-        var jsonString = JsonSerializer.Serialize(objectToWrite);
-        File.WriteAllText(filePath, jsonString);
+        try
+        {
+            using var stream = File.Create(filePath);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            JsonSerializer.Serialize(stream, objectToWrite, options);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Ошибка при записи в файл {filePath}", ex);
+        }
     }
 }
