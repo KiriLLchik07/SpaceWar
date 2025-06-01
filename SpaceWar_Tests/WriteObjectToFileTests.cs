@@ -31,4 +31,17 @@ public class WriteObjectToFileCommandTests
         Assert.Equal(2, deserialized!.Count);
         File.Delete(path);
     }
+
+    [Fact]
+    public void Execute_WhenFilePathIsInvalid_ThrowsInvalidOperationException()
+    {
+        var data = new { Test = 123 };
+        var invalidPath = "/invalid_path/test.json";
+
+        var command = new WriteObjectToFileCommand(invalidPath, data);
+
+        var exception = Assert.Throws<InvalidOperationException>(() => command.Execute());
+        Assert.Contains("Ошибка при записи в файл", exception.Message);
+        Assert.NotNull(exception.InnerException);
+    }
 }
