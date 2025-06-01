@@ -20,18 +20,22 @@ namespace SpaceWar_workspace
             Ioc.Resolve<App.ICommand>("IoC.Scope.Current.Set", _scope).Execute();
             var commandTimeLimit = Ioc.Resolve<TimeSpan>("Command.Time");
 
+            App.ICommand? cmd = null;
+
             while (Ioc.Resolve<Func<int>>("Game.Queue.Count")() > 0 && _stopwatch.Elapsed <= commandTimeLimit)
             {
                 try
                 {
                     _stopwatch.Start();
-                    var cmd = Ioc.Resolve<App.ICommand>("Game.Queue.Take");
+                    cmd = Ioc.Resolve<App.ICommand>("Game.Queue.Take");
                     cmd.Execute();
                 }
                 catch (Exception ex)
                 {
-                    var currentCmd = Ioc.Resolve<App.ICommand>("Game.Queue.Current");
-                    Ioc.Resolve<App.ICommand>("ExceptionHandler", ex, currentCmd).Execute();
+                    if (cmd != null)
+                    {
+                        Ioc.Resolve<App.ICommand>("ExceptionHandler", ex, cmd).Execute();
+                    }
                 }
                 finally
                 {
